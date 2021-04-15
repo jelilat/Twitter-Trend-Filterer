@@ -21,7 +21,7 @@ def extract_trends(BEARER_TOKEN):
     return all_trends
 
 def collect_trend(tweet, all_trends):
-    tweet = tweet.replace("@filtertrends ", "")
+    tweet = tweet.replace("@filtertrend ", "")
     if tweet in all_trends:
         all_trends.remove(tweet)
     return [all_trends, tweet]
