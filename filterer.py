@@ -22,6 +22,8 @@ def extract_trends(BEARER_TOKEN):
 
 def collect_trend(tweet, all_trends):
     tweet = tweet.replace("@filtertrend ", "")
+    if "#" in tweet:
+        tweet = tweet.replace("#", "%23")
     if tweet in all_trends:
         all_trends.remove(tweet)
     return [all_trends, tweet]
