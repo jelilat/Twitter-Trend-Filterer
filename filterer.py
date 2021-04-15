@@ -66,7 +66,7 @@ auth.set_access_token(oauth_token, oauth_secret)
 api = tweepy.API(auth)
 
 def respond(caller, url, tweet_id):
-    response = "@{} Hey buddy {}".format(caller, url)
+    response = "@{} Hey buddy! Here's the link to your filtered trend {}".format(caller, url)
     api.update_status(response, tweet_id)
 
 class StreamListener(tweepy.StreamListener):
