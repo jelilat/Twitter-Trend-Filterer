@@ -87,10 +87,6 @@ class StreamListener(tweepy.StreamListener):
         if status_code != 200:
             return False
 
-def main():
-    stream_listener = StreamListener()
-    stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-    stream.filter(track=["@filtertrend"])
-
-While True:
-    main()
+stream_listener = StreamListener()
+stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+stream.filter(track=["@filtertrend"])
