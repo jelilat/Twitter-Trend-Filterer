@@ -92,5 +92,5 @@ def main():
     stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
     stream.filter(track=["@filtertrend"])
 
-if __name__ == "__main__":
+While True:
     main()
