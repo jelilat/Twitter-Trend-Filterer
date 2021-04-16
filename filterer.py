@@ -79,6 +79,10 @@ def negative_response(caller, tweet_id):
     response = '@{} Hey buddy! Follow this format to get a link to your filtered trend (@filtertrend filter "trend_name")'.format(caller)
     api.update_status(response, tweet_id)
 
+def thanks(caller, tweet_id):
+    response = '@{} Thanks for mentioning @filtertrend'.format(caller)
+    api.update_status(response, tweet_id)
+
 class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
         tweet = status.text
@@ -97,6 +101,8 @@ class StreamListener(tweepy.StreamListener):
                 link = url(clean_trends, filter_trend)
                 shortened_url = shorten_url(link)
                 respond(caller, shortened_url, tweet_id)
+            elif re.match('(.+ @filtertrend .+)', twit) or re.match('(.+ @filtertrend)', twit):
+                thanks(caller, tweet_id)
             else:
                 negative_response(caller, tweet_id)  
         
