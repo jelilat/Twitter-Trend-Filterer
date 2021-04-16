@@ -82,15 +82,16 @@ class StreamListener(tweepy.StreamListener):
         caller = status.user
         caller = caller.screen_name
         tweet_id = status.id_str
-        if re.match('(@filtertrend filter "\w+\s\w+\")', tweet) or re.match('(@filtertrend filter "\w+\")', tweet):
-            trends = extract_trends(BEARER_TOKEN)
-            filter_trend = collect_trend(tweet, trends)
-            clean_trends = clean_trend(filter_trend)
-            link = url(clean_trends, filter_trend)
-            shortened_url = shorten_url(link)
-            respond(caller, shortened_url, tweet_id)
-        else:
-            negative_response(caller, tweet_id)  
+        if caller != "@filtertrend":
+            if re.match('(@filtertrend filter "\w+\s\w+\")', tweet) or re.match('(@filtertrend filter "\w+\")', tweet):
+                trends = extract_trends(BEARER_TOKEN)
+                filter_trend = collect_trend(tweet, trends)
+                clean_trends = clean_trend(filter_trend)
+                link = url(clean_trends, filter_trend)
+                shortened_url = shorten_url(link)
+                respond(caller, shortened_url, tweet_id)
+            else:
+                negative_response(caller, tweet_id)  
         
     def on_error(self, status_code):
         if status_code != 200:
