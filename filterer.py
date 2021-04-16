@@ -101,10 +101,10 @@ class StreamListener(tweepy.StreamListener):
                 link = url(clean_trends, filter_trend)
                 shortened_url = shorten_url(link)
                 respond(caller, shortened_url, tweet_id)
-            elif re.match('(.+ @filtertrend .+)', twit) or re.match('(.+ @filtertrend)', twit):
-                thanks(caller, tweet_id)
-            else:
-                negative_response(caller, tweet_id)  
+            #elif re.match('(.+ @filtertrend .+)', twit) or re.match('(.+ @filtertrend)', twit):
+                #thanks(caller, tweet_id)
+            #else:
+                #negative_response(caller, tweet_id)  
         
     def on_error(self, status_code):
         if status_code != 200:
