@@ -76,7 +76,7 @@ def respond(caller, url, tweet_id):
     api.update_status(response, tweet_id)
                
 def negative_response(caller, tweet_id):
-    response = '@{} Hey buddy! Follow this format to get a link to your filtered trend (@filtertrend filter "trend_name")'.format(caller)
+    response = '@{} Hey {}! Follow this format to get a link to your filtered trend (@filtertrend filter "trend_name")'.format(caller, caller)
     api.update_status(response, tweet_id)
 
 def thanks(caller, tweet_id):
