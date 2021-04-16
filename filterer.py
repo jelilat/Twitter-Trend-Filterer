@@ -82,8 +82,12 @@ class StreamListener(tweepy.StreamListener):
         caller = status.user
         caller = caller.screen_name
         tweet_id = status.id_str
+        if "#" in tweet:
+            twit = tweet.replace("#", "")
+        else:
+            twit = tweet
         if caller != "@filtertrend":
-            if re.match('(@filtertrend filter "\w+\s\w+\")', tweet) or re.match('(@filtertrend filter "\w+\")', tweet):
+            if re.match('(@filtertrend filter "\w+\s\w+\")', twit) or re.match('(@filtertrend filter "\w+\")', twit):
                 trends = extract_trends(BEARER_TOKEN)
                 filter_trend = collect_trend(tweet, trends)
                 clean_trends = clean_trend(filter_trend)
