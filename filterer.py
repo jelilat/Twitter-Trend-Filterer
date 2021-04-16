@@ -22,10 +22,10 @@ def extract_trends(BEARER_TOKEN):
 
 def collect_trend(tweet, all_trends):
     tweet = tweet.replace("@filtertrend ", "")
-    if "#" in tweet:
-        tweet = tweet.replace("#", "%23")
     if tweet in all_trends:
         all_trends.remove(tweet)
+    if "#" in tweet:
+        tweet = tweet.replace("#", "%23")
     return [all_trends, tweet]
 
 def clean_trend(collect_trend):
@@ -50,7 +50,7 @@ def url(clean_trends, collect_trend):
         doc+=x
         doc+= '"'
         doc+="%20"
-    url = 'https://twitter.com/search?q="{}"%20{}&src=typed_query&f=live&lf=on'.format(collect_trend[1], doc)
+    url = 'https://twitter.com/search?q="{}"%20{}%20min_replies%3A2%20-filter%3Areplies&src=typed_query&f=live&lf=on'.format(collect_trend[1], doc)
     return url
 
 def shorten_url(url):
@@ -70,6 +70,10 @@ api = tweepy.API(auth)
 def respond(caller, url, tweet_id):
     response = "@{} Hey buddy! Here's the link to your filtered trend {}".format(caller, url)
     api.update_status(response, tweet_id)
+               
+def negative_response(caller, tweet_id):
+    response = '@{} Hey buddy! Follow this format to get a link to your filtered trend (@filtertrend filter "trend_name")'.format(caller)
+    api.update_status(response, tweet_id)
 
 class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
@@ -77,13 +81,15 @@ class StreamListener(tweepy.StreamListener):
         caller = status.user
         caller = caller.screen_name
         tweet_id = status.id_str
-        
-        trends = extract_trends(BEARER_TOKEN)
-        filter_trend = collect_trend(tweet, trends)
-        clean_trends = clean_trend(filter_trend)
-        link = url(clean_trends, filter_trend)
-        shortened_url = shorten_url(link)
-        respond(caller, shortened_url, tweet_id)
+        if re.match('(@filtertrend filter "\w+\s\w+\")', tweet) or re.match('(@filtertrend filter "\w+\")', tweet):
+            trends = extract_trends(BEARER_TOKEN)
+            filter_trend = collect_trend(tweet, trends)
+            clean_trends = clean_trend(filter_trend)
+            link = url(clean_trends, filter_trend)
+            shortened_url = shorten_url(link)
+            respond(caller, shortened_url, tweet_id)
+        else:
+            negative_response(caller, tweet_id)  
         
     def on_error(self, status_code):
         if status_code != 200:
