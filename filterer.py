@@ -54,7 +54,7 @@ def url(clean_trends, collect_trend):
         doc+=x
         doc+= '"'
         doc+="%20"
-    url = 'https://twitter.com/search?q="{}"%20{}%20min_replies%3A1&src=typed_query&f=live&lf=on'.format(collect_trend[1], doc)
+    url = 'https://twitter.com/search?q="{}"%20{}%20-from%3ARadioIsMyFriend&src=typed_query&f=live&lf=on'.format(collect_trend[1], doc)
     return url
 
 def shorten_url(url):
