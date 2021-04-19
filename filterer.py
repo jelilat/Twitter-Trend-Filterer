@@ -29,6 +29,8 @@ def collect_trend(tweet, all_trends):
         all_trends.remove(tweet)
     if hash_tweet in all_trends:
         all_trends.remove(hash_tweet)
+    if ' ' in tweet:
+        tweet = tweet.replace(' ', '%20')
     if "#" in tweet:
         tweet = tweet.replace("#", "%23")
     return [all_trends, tweet]
@@ -95,7 +97,7 @@ class StreamListener(tweepy.StreamListener):
         else:
             twit = tweet
         if caller != "filtertrend":
-            if re.match('(@filtertrend filter "\w+\s\w+\")', twit) or re.match('(@filtertrend filter "\w+\")', twit) or re.match('(@filtertrend filter "#\w+\")', twit):
+            if re.match('(@filtertrend filter "\w+\s\w+\")', twit) or re.match('(@filtertrend filter "?\w+\"?)', twit) or re.match('(@filtertrend filter "?#\w+\"?)', twit):
                 trends = extract_trends(BEARER_TOKEN)
                 filter_trend = collect_trend(tweet, trends)
                 clean_trends = clean_trend(filter_trend)
