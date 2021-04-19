@@ -25,14 +25,28 @@ def collect_trend(tweet, all_trends):
     if '"' in tweet:
         tweet = tweet.replace('"', '')
     hash_tweet = "#" + tweet
-    if (tweet in all_trends) or (tweet.lower() in all_trends):
-        all_trends.remove(tweet)
-    if hash_tweet in all_trends:
-        all_trends.remove(hash_tweet)
+    if "," in tweet:
+        tweet = tweet.replace(",", "%2C")
+        split_tweet = tweet.split(",")
+        
+        for twit in split_tweet:
+            hash_split = "#" + twit
+            if (twit in all_trends) or (twit.lower() in all_trends):
+                all_trends.remove(twit)
+            if hash_split in all_trends:
+                all_trends.remove(hash_split)
+            if "#" in twit:
+                tweet = twit.replace("#", "%23")
+    else:
+        if (tweet in all_trends) or (tweet.lower() in all_trends):
+            all_trends.remove(tweet)
+        if hash_tweet in all_trends:
+            all_trends.remove(hash_tweet)
+        if "#" in tweet:
+            tweet = tweet.replace("#", "%23")
     if ' ' in tweet:
         tweet = tweet.replace(' ', '%20')
-    if "#" in tweet:
-        tweet = tweet.replace("#", "%23")
+    
     return [all_trends, tweet]
 
 def clean_trend(collect_trend):
