@@ -72,7 +72,7 @@ def url(clean_trends, collect_trend):
         doc+= '"'
         doc+="%20"
     url = 'https://twitter.com/search?q={}%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow'.format(collect_trend[1], doc)
-    link = 'https://api.twitter.com/2/tweets/search/recent?query={}%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow-is%3Aretweet'.format(collect_trend[1], doc)
+    link = 'https://api.twitter.com/2/tweets/search/recent?query={}%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow%20-is%3Aretweet'.format(collect_trend[1], doc)
     return [url, link]
 
 def detect_spammers(link):
