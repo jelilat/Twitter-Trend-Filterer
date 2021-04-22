@@ -71,8 +71,42 @@ def url(clean_trends, collect_trend):
         doc+=x
         doc+= '"'
         doc+="%20"
-    url = 'https://twitter.com/search?q="{}"%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow&src=typed_query&f=live&lf=on'.format(collect_trend[1], doc)
-    return url
+    url = 'https://twitter.com/search?q="{}"%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow'.format(collect_trend[1], doc)
+    link = 'https://api.twitter.com/2/tweets/search/recent?query="{}"%20{}%20-from%3ARadioIsMyFriend%20-from%3Atruthbe_toldnow-is%3Aretweet'.format(collect_trend[1], doc)
+    return [url, link]
+
+def detect_spammers(link):
+    url = link[1] + '&expansions=author_id&max_results=100'
+    resp = requests.get(url, headers= {'Authorization': 'Bearer ' + BEARER_TOKEN
+                                     })
+    tweets = resp.json()['data']
+    spam = []
+    for tweet in tweets:
+        if (tweet['text'].count("#") > 2) or (tweet['text'].count("|") > 1):
+            spam.append(tweet)
+        
+    return spam
+
+def spammer_name(spam):
+    spammers = []
+    for spam_tweet in spam:
+        i_d = spam_tweet['author_id']
+        url = 'https://api.twitter.com/1.1/users/lookup.json?user_id={}'.format(i_d)
+        response = requests.get(url, headers= {'Authorization': 'Bearer ' + BEARER_TOKEN
+                                         })
+        spammer = response.json()[0]['screen_name']
+        spammers.append(spammer)
+    
+    spammers = list(dict.fromkeys(spammers))
+    return spammers
+
+def update_link(spammers, link):
+    doc = ""
+    for handle in spammers[0:6]:
+        spam_handle = "%20-from%3A" + handle
+        doc += spam_handle
+    updated_url = link[0] + doc + '&src=typed_query&f=live&lf=on'
+    return updated_url
 
 def shorten_url(url):
     headers = {"Authorization": f"Bearer {'8793f1ef9f5b5a53bcba9b4c3fb224c212afbf9d'}"}
@@ -116,7 +150,10 @@ class StreamListener(tweepy.StreamListener):
                 filter_trend = collect_trend(tweet, trends)
                 clean_trends = clean_trend(filter_trend)
                 link = url(clean_trends, filter_trend)
-                shortened_url = shorten_url(link)
+                spam = detect_spammers(link)
+                spammers = spammer_name(spam)
+                link_update = update_link(spammers, link)
+                shortened_url = shorten_url(link_update)
                 respond(caller, shortened_url, tweet_id)
             #elif re.match('(.+ @filtertrend .+)', twit) or re.match('(.+ @filtertrend)', twit):
                 #thanks(caller, tweet_id)
