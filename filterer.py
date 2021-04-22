@@ -25,6 +25,11 @@ def collect_trend(tweet, all_trends):
     if '"' in tweet:
         tweet = tweet.replace('"', '')
     hash_tweet = "#" + tweet
+    
+    for trend in all_trends:
+        if (tweet.lower() == trend.lower()) or (hash_tweet.lower() == trend.lower()):
+            all_trends.remove(trend)
+            
     if "," in tweet:
         tweet = tweet.replace(",", "%2C")
         split_tweet = tweet.split(",")
