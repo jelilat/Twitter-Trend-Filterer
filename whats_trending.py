@@ -69,20 +69,20 @@ def detect_spammers(link):
     includes = resp.json()['includes']['users']
     
     for d in data:
-      all_data.append(d)
+        all_data.append(d)
     
     while len(resp.json()['meta']) == 4:
-      next_token = resp.json()['meta']['next_token']
-      link = url + '&next_token={}'.format(next_token)
-    
-      resp = requests.get(link, headers= {'Authorization': 'Bearer ' + BEARER_TOKEN
+        next_token = resp.json()['meta']['next_token']
+        link = url + '&next_token={}'.format(next_token)
+
+        resp = requests.get(link, headers= {'Authorization': 'Bearer ' + BEARER_TOKEN
                                     })
-      include = resp.json()['includes']['users']
-      for user in include:
-        includes.append(user)
-      daya = resp.json()['data']
-      for d in daya:
-        all_data.append(d)
+        include = resp.json()['includes']['users']
+        for user in include:
+            includes.append(user)
+            daya = resp.json()['data']
+        for d in daya:
+            all_data.append(d)
       
     spam = []
     for tweet in all_data[0:100]:
@@ -96,9 +96,9 @@ def spammer_name(spam):
     for spam_tweet in spam[0]:
         i_d = spam_tweet['id']
         for user in spam[2]:
-          if i_d == user['id']:
-            spammers.append(user['username'])
-            break
+            if i_d == user['id']:
+                spammers.append(user['username'])
+                break
     
     spammers = list(dict.fromkeys(spammers))
     return spammers
@@ -116,8 +116,8 @@ def summarizer(spam):
     document = []
     
     for tweet in data[:100]:
-      if (tweet['text'].count("#") < 2) or (tweet['text'].count("|") < 1):
-        document.append(tweet['text']
+        if (tweet['text'].count("#") < 2) or (tweet['text'].count("|") < 1):
+            document.append(tweet['text']
                         
     body = document.encode('utf-8')
     resp = requests.post('https://api.smrzr.io/v1/summarize?num_sentences=1&algorithm=kmeans', data=body)
@@ -139,5 +139,5 @@ auth.set_access_token(oauth_token, oauth_secret)
 api = tweepy.API(auth)
                
 def respond(url, summary, trend):
-    response = '"{}" Read more about the {} here {}'.format(summary, trend, url)
+    response = '"{}" Read more about the {} trend here {}'.format(summary, trend, url)
     api.update_status(response)
