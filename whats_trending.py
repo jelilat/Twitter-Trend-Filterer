@@ -99,6 +99,12 @@ def detect_spammers(link):
 
     return [spam, all_data, includes]
 
+def fav(tweets):
+    for tweet in tweets:
+        url = 'https://api.twitter.com/1.1/favorites/create.json?id={}'.format(tweet['id'])
+        requests.get(url, headers= {'Authorization': 'Bearer ' + BEARER_TOKEN
+                                         })
+
 def spammer_name(spam):
     spammers = []
     for spam_tweet in spam[0]:
@@ -181,15 +187,19 @@ if current_time == "12:00":
         urls = url(clean_trends, trend)
         spammers_n_data = detect_spammers(urls)
         spammers = spammer_name(spammers_n_data)
+        all_tweet = spammers_n_data[1]
+        fav(all_tweet[0:49])
         url_update = update_link(spammers, urls)
         short_url = shorten_url(url_update)
         replies = get_highest_replies(spammers_n_data)
         user_name = star(replies, spammers_n_data)
-        summary = summarizer(replies)
-        #print(summary)
+        if replies == "":
+            summary = ""
+        else:
+            summary = summarizer(replies)
         short_url = shorten_url(url_update)
-        #print(short_url)
         tweet_trend(short_url, summary, trend)
         time.sleep(300)
         tweet_why(user_name, replies)
-        time.sleep(600)   
+        time.sleep(600)  
+        fav(all_tweet[50:100])
