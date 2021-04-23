@@ -159,9 +159,9 @@ auth.set_access_token(oauth_token, oauth_secret)
 api = tweepy.API(auth)
                
 def tweet_trend(url, summary, trend):
-    if len(summary) > 190:
-        summary = summary[0:190]
-    response = '"{}" Read more about the {} trend here {}'.format(summary, trend, url)
+    if len(summary) > 180:
+        summary = summary[0:180]
+    response = '"{}" Read more about the {} trend here {} #whatstrending'.format(summary, trend, url)
     api.update_status(response)
     #print(response)
     
