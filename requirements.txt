@@ -7,4 +7,3 @@ tweepy==3.10.0
 twitter==1.18.0
 twitter-oauth==0.2.0
 datetime==4.3.0
-random==1.0.1
