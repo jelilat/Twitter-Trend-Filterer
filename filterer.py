@@ -70,7 +70,7 @@ def clean_trend(collect_trend):
 
 def url(clean_trends, collect_trend):
     doc = ""
-    for x in clean_trends[0:25]:
+    for x in clean_trends[0:23]:
         doc+= '-'
         doc+= '"'
         doc+=x
