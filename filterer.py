@@ -21,7 +21,10 @@ def extract_trends(BEARER_TOKEN):
     return all_trends
 
 def collect_trend(tweet, all_trends):
-    tweet = tweet.replace("@filtertrend filter ", "")
+    if "filter" in tweet:
+        tweet = tweet.replace("@filtertrend filter ", "")
+    elif "Filter" in tweet:
+        tweet = tweet.replace("@filtertrend Filter ", "")
     if '"' in tweet:
         tweet = tweet.replace('"', '')
     hash_tweet = "#" + tweet
